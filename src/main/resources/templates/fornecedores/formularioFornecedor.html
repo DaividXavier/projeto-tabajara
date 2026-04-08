@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cadastrar Fornecedor</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<style>
+/* Fundo animado */
+body {
+    margin:0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: linear-gradient(-45deg,#020617,#0f172a,#1e3a8a,#0ea5e9);
+    background-size:400% 400%;
+    animation: gradient 12s ease infinite;
+    color:white;
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:20px;
+}
+
+@keyframes gradient{
+0%{background-position:0% 50%;}
+50%{background-position:100% 50%;}
+100%{background-position:0% 50%;}
+}
+
+/* Card central */
+.form-card{
+    background: rgba(0,0,0,0.8);
+    padding:40px;
+    border-radius:15px;
+    width:100%;
+    max-width:500px;
+    box-shadow: 0px 10px 25px rgba(0,0,0,0.6);
+}
+
+/* Título */
+h1{
+    text-align:center;
+    color:#00bcd4;
+    margin-bottom:30px;
+}
+
+/* Labels e inputs */
+label{
+    display:block;
+    margin-top:15px;
+    font-weight:bold;
+}
+
+input[type="text"]{
+    width:100%;
+    padding:10px;
+    margin-top:5px;
+    border-radius:8px;
+    border:none;
+    background-color:#1e293b;
+    color:white;
+}
+
+input[type="text"]::placeholder{
+    color:#9ca3af;
+}
+
+/* Botão salvar */
+input[type="submit"]{
+    margin-top:25px;
+    width:100%;
+    padding:12px;
+    font-size:18px;
+    font-weight:bold;
+    border:none;
+    border-radius:10px;
+    background-color:#10b981; /* verde */
+    color:white;
+    cursor:pointer;
+    transition:0.3s;
+}
+
+input[type="submit"]:hover{
+    background-color:#059669;
+}
+
+/* Link voltar */
+.back-btn{
+    display:block;
+    margin-top:20px;
+    text-align:center;
+    text-decoration:none;
+    color:#6b7280;
+    font-weight:bold;
+}
+
+.back-btn:hover{
+    color:#10b981;
+}
+</style>
+
+</head>
+<body>
+
+<div class="form-card">
+
+<h1>Cadastrar Fornecedor</h1>
+
+<form th:action="@{/fornecedores/salvar}" method="POST" th:object="${fornecedor}">
+
+<input type="hidden" th:field="*{idFornecedor}" />
+
+<label for="nomeFornecedor">Nome:</label>
+<input type="text" name="nomeFornecedor" th:field="*{nomeFornecedor}" placeholder="Digite o nome do fornecedor" />
+
+<label for="cnpjFornecedor">CNPJ:</label>
+<input type="text" name="cnpjFornecedor" th:field="*{cnpjFornecedor}" placeholder="Digite o CNPJ" />
+
+<label for="telefoneFornecedor">Telefone:</label>
+<input type="text" name="telefoneFornecedor" th:field="*{telefoneFornecedor}" placeholder="Digite o telefone" />
+
+<label for="enderecoFornecedor">Endereço:</label>
+<input type="text" name="enderecoFornecedor" th:field="*{enderecoFornecedor}" placeholder="Digite o endereço" />
+
+<label for="cidadeFornecedor">Cidade:</label>
+<input type="text" name="cidadeFornecedor" th:field="*{cidadeFornecedor}" placeholder="Digite a cidade" />
+
+<input type="submit" value="Salvar">
+
+</form>
+
+<a th:href="@{/tabajara}" class="back-btn">⬅ Voltar para a lista de fornecedores</a>
+
+</div>
+
+</body>
+</html>

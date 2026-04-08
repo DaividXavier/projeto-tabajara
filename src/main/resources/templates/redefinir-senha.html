@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Redefinir Senha • Organizações Tabajara</title>
+</head>
+<body>
+    <h1 style="text-align:center">Redefinição de Senha</h1>
+    <h2 style="text-align: center;">Digite sua nova senha abaixo.</h2>
+    <p th:if="${erro}" th:text="${erro}" style="color: red;"></p>
+    <p th:if="${mensagem}" th:text="${mensagem}" style="color: green;"></p>
+    <form th:action="@{/redefinir-senha}" method="post">
+        <input type="hidden" name="token" th:value="${token}">
+        <label for="novaSenha">Nova senha:</label>
+        <input type="password" id="novaSenha" name="novaSenha" required placeholder="Digite sua nova senha">
+        <br>
+        <label for="confirmarSenha">Confirmar nova senha:</label>
+        <input type="password" id="confirmarSenha" name="confirmarSenha" required placeholder="Confirmar nova senha">
+        <br>
+        <button type="submit">Redefinir senha</button>
+    </form>
+    <a th:href="@{/login}">Voltar para o login</a>
+</body>
+</html>
