@@ -13,27 +13,27 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
     <style>
-        /* MESMO CSS PREMIUM DO DASHBOARD */
+        /* NOVO DESIGN MODERNO E MINIMALISTA */
         :root {
-            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            --success-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-            --warning-gradient: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
-            --dark-gradient: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
-            --glass-bg: rgba(255, 255, 255, 0.1);
-            --glass-border: rgba(255, 255, 255, 0.2);
+            --primary-color: #2563eb;
+            --primary-dark: #1e40af;
+            --secondary-color: #f97316;
+            --success-color: #10b981;
+            --light-bg: #f9fafb;
+            --card-bg: #ffffff;
+            --text-dark: #1f2937;
+            --text-light: #6b7280;
+            --border-color: #e5e7eb;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             min-height: 100vh;
-            font-family: 'Inter', sans-serif;
-            color: #ffffff;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            color: var(--text-dark);
             overflow-x: hidden;
-            background: linear-gradient(-45deg, #0f0f23, #1a1a2e, #16213e, #0f3460, #533a7c, #0ea5e9);
-            background-size: 600% 600%;
-            animation: gradientShift 15s ease infinite;
+            background: linear-gradient(135deg, var(--light-bg) 0%, #ffffff 100%);
             position: relative;
         }
 
@@ -45,70 +45,50 @@
             width: 100%;
             height: 100%;
             background-image: 
-                radial-gradient(2px 2px at 20px 30px, #eee, transparent),
-                radial-gradient(2px 2px at 40px 70px, rgba(255,255,255,0.8), transparent),
-                radial-gradient(1px 1px at 90px 40px, #fff, transparent),
-                radial-gradient(1px 1px at 130px 80px, rgba(255,255,255,0.6), transparent);
-            background-repeat: repeat;
-            background-size: 200px 100px;
-            animation: float 20s linear infinite;
-            opacity: 0.1;
+                radial-gradient(circle at 20% 50%, rgba(37, 99, 235, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(249, 115, 22, 0.1) 0%, transparent 50%);
             z-index: 0;
-        }
-
-        @keyframes gradientShift {
-            0% { background-position: 0% 50%; }
-            25% { background-position: 100% 50%; }
-            50% { background-position: 100% 100%; }
-            75% { background-position: 0% 100%; }
-            100% { background-position: 0% 50%; }
-        }
-
-        @keyframes float {
-            0% { transform: translateY(0px) rotate(0deg); }
-            100% { transform: translateY(-20px) rotate(360deg); }
+            pointer-events: none;
         }
 
         .navbar {
-            background: rgba(15, 15, 35, 0.95);
-            backdrop-filter: blur(20px);
-            border-bottom: 1px solid var(--glass-border);
-            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+            background: var(--card-bg);
+            border-bottom: 1px solid var(--border-color);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1030;
         }
 
         .navbar-brand {
             font-weight: 700;
-            font-size: 1.5rem;
-            letter-spacing: 1px;
-            background: var(--primary-gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            font-size: 1.3rem;
+            letter-spacing: -0.5px;
+            color: var(--primary-color) !important;
         }
 
         .hero {
             text-align: center;
-            padding: 120px 0 80px;
+            padding: 140px 20px 80px;
             position: relative;
             z-index: 1;
         }
 
         .hero h1 {
-            font-size: clamp(3rem, 6vw, 5rem);
+            font-size: clamp(2.5rem, 5vw, 3.5rem);
             font-weight: 800;
-            background: linear-gradient(135deg, #ffffff 0%, #e0e7ff 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            color: var(--text-dark);
             margin-bottom: 1.5rem;
-            text-shadow: 0 0 40px rgba(255,255,255,0.4);
             letter-spacing: -1px;
+            line-height: 1.2;
         }
 
         .hero p {
-            font-size: 1.3rem;
-            opacity: 0.9;
-            font-weight: 300;
+            font-size: 1.2rem;
+            color: var(--text-light);
+            font-weight: 400;
             max-width: 600px;
             margin: 0 auto 3rem;
             line-height: 1.6;
@@ -123,16 +103,16 @@
         }
 
         .card {
-            background: rgba(255, 255, 255, 0.08);
-            backdrop-filter: blur(20px);
-            border: 1px solid var(--glass-border);
-            border-radius: 24px;
-            padding: 3rem;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 3rem 2.5rem;
             height: 100%;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
             text-align: center;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
         }
 
         .card::before {
@@ -142,15 +122,16 @@
             left: 0;
             right: 0;
             height: 4px;
-            background: var(--primary-gradient);
+            background: var(--primary-color);
             transform: scaleX(0);
-            transition: transform 0.4s ease;
+            transition: transform 0.3s ease;
+            transform-origin: left;
         }
 
         .card:hover {
-            transform: translateY(-15px) scale(1.03);
-            box-shadow: 0 30px 60px rgba(0,0,0,0.4);
-            border-color: rgba(255,255,255,0.3);
+            transform: translateY(-8px);
+            box-shadow: 0 12px 24px rgba(0,0,0,0.08);
+            border-color: var(--primary-color);
         }
 
         .card:hover::before {
@@ -158,84 +139,108 @@
         }
 
         .card-icon {
-            font-size: 4rem;
-            width: 120px;
-            height: 120px;
-            border-radius: 24px;
+            font-size: 3rem;
+            width: 100px;
+            height: 100px;
+            border-radius: 16px;
             display: flex;
             align-items: center;
             justify-content: center;
             margin: 0 auto 1.5rem;
-            background: var(--glass-bg);
-            backdrop-filter: blur(15px);
-            border: 2px solid var(--glass-border);
+            border: 2px solid var(--border-color);
+            transition: all 0.3s ease;
         }
 
         .card h3 {
-            font-size: 1.8rem;
+            font-size: 1.5rem;
             font-weight: 700;
-            margin-bottom: 1rem;
-            background: linear-gradient(135deg, #ffffff 0%, #e0e7ff 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            margin-bottom: 0.8rem;
+            color: var(--text-dark);
         }
 
         .card p {
-            color: rgba(255, 255, 255, 0.85);
-            line-height: 1.7;
+            color: var(--text-light);
+            line-height: 1.6;
             margin-bottom: 2rem;
-            font-size: 1.1rem;
+            font-size: 1rem;
         }
 
         .btn-custom {
-            background: var(--primary-gradient);
+            background: var(--primary-color);
+            color: white;
             border: none;
-            border-radius: 16px;
-            padding: 18px 40px;
-            font-size: 1.1rem;
+            border-radius: 12px;
+            padding: 14px 32px;
+            font-size: 1rem;
             font-weight: 600;
-            letter-spacing: 0.5px;
-            backdrop-filter: blur(20px);
+            letter-spacing: 0.3px;
             transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
-            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+            display: inline-block;
+            text-decoration: none;
         }
 
         .btn-custom:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 20px 40px rgba(102, 126, 234, 0.6);
-            color: #ffffff !important;
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(37, 99, 235, 0.3);
+            color: white !important;
         }
 
-        .card-login .card-icon { background: rgba(102, 126, 234, 0.3); color: #667eea; }
-        .card-register .card-icon { background: rgba(245, 87, 108, 0.3); color: #f5576c; }
+        .btn-custom:active {
+            transform: translateY(0);
+        }
+
+        .card-login .card-icon { 
+            background: rgba(37, 99, 235, 0.1); 
+            color: var(--primary-color);
+            border-color: rgba(37, 99, 235, 0.2);
+        }
+
+        .card-login:hover .card-icon {
+            background: rgba(37, 99, 235, 0.15);
+            border-color: var(--primary-color);
+        }
+
+        .card-register .card-icon { 
+            background: rgba(249, 115, 22, 0.1); 
+            color: var(--secondary-color);
+            border-color: rgba(249, 115, 22, 0.2);
+        }
+
+        .card-register:hover .card-icon {
+            background: rgba(249, 115, 22, 0.15);
+            border-color: var(--secondary-color);
+        }
 
         .footer { 
             text-align: center; 
-            padding: 4rem 20px; 
-            opacity: 0.7; 
-            font-size: 0.95rem; 
+            padding: 3rem 20px; 
+            color: var(--text-light); 
+            font-size: 0.9rem; 
             position: relative; 
-            z-index: 1; 
+            z-index: 1;
+            border-top: 1px solid var(--border-color);
         }
 
         @media (max-width: 768px) {
-            .hero { padding: 100px 0 60px; }
+            .hero { padding: 120px 20px 60px; }
+            .hero h1 { font-size: 2rem; }
             .landing-cards { padding: 0 15px 80px; }
-            .card { margin-bottom: 1.5rem; padding: 2.5rem 2rem; }
+            .card { margin-bottom: 1.5rem; padding: 2rem 1.5rem; }
         }
 
         html { scroll-behavior: smooth; }
 
         .card { 
-            animation: fadeInUp 0.8s ease forwards; 
+            animation: fadeInUp 0.6s ease forwards; 
             opacity: 0; 
-            transform: translateY(40px); 
+            transform: translateY(30px); 
         }
-        .card:nth-child(1) { animation-delay: 0.2s; }
-        .card:nth-child(2) { animation-delay: 0.4s; }
+        .card:nth-child(1) { animation-delay: 0.1s; }
+        .card:nth-child(2) { animation-delay: 0.2s; }
 
         @keyframes fadeInUp { 
             to { opacity: 1; transform: translateY(0); } 

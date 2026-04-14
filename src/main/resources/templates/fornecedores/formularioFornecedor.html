@@ -1,139 +1,341 @@
 <!DOCTYPE html>
 <html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Cadastrar Fornecedor</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fornecedor - Organizações Tabajara</title>
+    
+    <!-- Bootstrap 5.3.2 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --primary-dark: #1e40af;
+            --secondary-color: #f97316;
+            --success-color: #10b981;
+            --danger-color: #dc2626;
+            --light-bg: #f9fafb;
+            --card-bg: #ffffff;
+            --text-dark: #1f2937;
+            --text-light: #6b7280;
+            --border-color: #e5e7eb;
+        }
 
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-<style>
-/* Fundo animado */
-body {
-    margin:0;
-    font-family: Arial, Helvetica, sans-serif;
-    background: linear-gradient(-45deg,#020617,#0f172a,#1e3a8a,#0ea5e9);
-    background-size:400% 400%;
-    animation: gradient 12s ease infinite;
-    color:white;
-    min-height:100vh;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    padding:20px;
-}
+        html, body {
+            height: 100%;
+        }
 
-@keyframes gradient{
-0%{background-position:0% 50%;}
-50%{background-position:100% 50%;}
-100%{background-position:0% 50%;}
-}
+        body {
+            font-family: 'Inter', sans-serif;
+            color: var(--text-dark);
+            min-height: 100vh;
+            background: linear-gradient(135deg, var(--light-bg) 0%, #ffffff 100%);
+            position: relative;
+            overflow-x: hidden;
+            padding-top: 70px;
+        }
 
-/* Card central */
-.form-card{
-    background: rgba(0,0,0,0.8);
-    padding:40px;
-    border-radius:15px;
-    width:100%;
-    max-width:500px;
-    box-shadow: 0px 10px 25px rgba(0,0,0,0.6);
-}
+        /* Subtle radial gradient overlays */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(37, 99, 235, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(249, 115, 22, 0.03) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+        }
 
-/* Título */
-h1{
-    text-align:center;
-    color:#00bcd4;
-    margin-bottom:30px;
-}
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
 
-/* Labels e inputs */
-label{
-    display:block;
-    margin-top:15px;
-    font-weight:bold;
-}
+        /* Navbar */
+        .navbar {
+            background: var(--card-bg);
+            border-bottom: 1px solid var(--border-color);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+        }
 
-input[type="text"]{
-    width:100%;
-    padding:10px;
-    margin-top:5px;
-    border-radius:8px;
-    border:none;
-    background-color:#1e293b;
-    color:white;
-}
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.3rem;
+            color: var(--primary-color);
+        }
+        .form-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 2.5rem;
+            width: 100%;
+            max-width: 520px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            animation: fadeInUp 0.6s ease forwards;
+        }
 
-input[type="text"]::placeholder{
-    color:#9ca3af;
-}
+        .form-card:hover {
+            box-shadow: 0 4px 6px rgba(0,0,0,0.07);
+            transform: translateY(-2px);
+        }
 
-/* Botão salvar */
-input[type="submit"]{
-    margin-top:25px;
-    width:100%;
-    padding:12px;
-    font-size:18px;
-    font-weight:bold;
-    border:none;
-    border-radius:10px;
-    background-color:#10b981; /* verde */
-    color:white;
-    cursor:pointer;
-    transition:0.3s;
-}
+        /* Header */
+        .form-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
 
-input[type="submit"]:hover{
-    background-color:#059669;
-}
+        .form-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
 
-/* Link voltar */
-.back-btn{
-    display:block;
-    margin-top:20px;
-    text-align:center;
-    text-decoration:none;
-    color:#6b7280;
-    font-weight:bold;
-}
+        .form-subtitle {
+            color: var(--text-light);
+            font-weight: 400;
+            font-size: 0.95rem;
+        }
 
-.back-btn:hover{
-    color:#10b981;
-}
-</style>
+        /* Form Group */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
 
+        .form-label {
+            display: block;
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-dark);
+        }
+
+        /* Input Fields */
+        .form-control {
+            background: var(--light-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 12px 16px;
+            font-size: 1rem;
+            color: var(--text-dark);
+            transition: all 0.3s ease;
+            height: auto;
+        }
+
+        .form-control:focus {
+            background: var(--card-bg);
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+            color: var(--text-dark);
+            outline: none;
+        }
+
+        .form-control::placeholder {
+            color: var(--text-light);
+        }
+
+        /* Submit Button */
+        .btn-submit {
+            background: var(--primary-color);
+            border: none;
+            border-radius: 8px;
+            padding: 12px 24px;
+            font-size: 1rem;
+            font-weight: 600;
+            color: white;
+            width: 100%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 1.5rem;
+        }
+
+        .btn-submit:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+            color: white;
+        }
+
+        /* Back Button */
+        .btn-back {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 1rem;
+            padding: 10px 16px;
+            background: var(--light-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-dark);
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            text-align: center;
+            justify-content: center;
+            width: 100%;
+        }
+
+        .btn-back:hover {
+            background: var(--card-bg);
+            color: var(--primary-color);
+            border-color: var(--primary-color);
+            transform: translateY(-1px);
+            text-decoration: none;
+        }
+
+        /* Responsive */
+        @media (max-width: 576px) {
+            .main-container {
+                padding-top: 100px;
+                padding-bottom: 40px;
+            }
+            
+            .form-card {
+                padding: 1.5rem;
+                margin: 0 15px;
+            }
+            
+            .form-title {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
 </head>
 <body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/tabajara">
+                <i class="bi bi-building me-2"></i>
+                Organizações Tabajara
+            </a>
+        </div>
+    </nav>
 
-<div class="form-card">
+    <!-- Main Container -->
+    <div class="main-container">
+        <div class="form-wrapper">
+            <div class="form-card">
 
-<h1>Cadastrar Fornecedor</h1>
+                <!-- Header -->
+                <div class="form-header">
+                    <h1 class="form-title">
+                        <i class="bi bi-box-seam"></i>
+                        <span th:text="${fornecedor.idFornecedor != null} ? 'Editar Fornecedor' : 'Novo Fornecedor'">Novo Fornecedor</span>
+                    </h1>
+                    <p class="form-subtitle" th:text="${fornecedor.idFornecedor != null} ? 'Atualize as informações do fornecedor' : 'Preencha todos os campos obrigatórios'">
+                        Preencha todos os campos obrigatórios
+                    </p>
+                </div>
 
-<form th:action="@{/fornecedores/salvar}" method="POST" th:object="${fornecedor}">
+                <!-- Form -->
+                <form th:action="@{/fornecedores/salvar}" method="POST" th:object="${fornecedor}">
 
-<input type="hidden" th:field="*{idFornecedor}" />
+                    <input type="hidden" th:field="*{idFornecedor}" />
 
-<label for="nomeFornecedor">Nome:</label>
-<input type="text" name="nomeFornecedor" th:field="*{nomeFornecedor}" placeholder="Digite o nome do fornecedor" />
+                    <!-- Nome -->
+                    <div class="form-group">
+                        <label for="nomeFornecedor" class="form-label">Nome do Fornecedor</label>
+                        <input type="text" 
+                               class="form-control" 
+                               th:field="*{nomeFornecedor}" 
+                               placeholder="Ex: ABC Fornecedora LTDA"
+                               required>
+                    </div>
 
-<label for="cnpjFornecedor">CNPJ:</label>
-<input type="text" name="cnpjFornecedor" th:field="*{cnpjFornecedor}" placeholder="Digite o CNPJ" />
+                    <!-- CNPJ -->
+                    <div class="form-group">
+                        <label for="cnpjFornecedor" class="form-label">CNPJ</label>
+                        <input type="text" 
+                               class="form-control" 
+                               th:field="*{cnpjFornecedor}" 
+                               placeholder="XX.XXX.XXX/XXXX-XX"
+                               required>
+                    </div>
 
-<label for="telefoneFornecedor">Telefone:</label>
-<input type="text" name="telefoneFornecedor" th:field="*{telefoneFornecedor}" placeholder="Digite o telefone" />
+                    <!-- Telefone -->
+                    <div class="form-group">
+                        <label for="telefoneFornecedor" class="form-label">Telefone</label>
+                        <input type="text" 
+                               class="form-control" 
+                               th:field="*{telefoneFornecedor}" 
+                               placeholder="(XX) XXXXX-XXXX"
+                               required>
+                    </div>
 
-<label for="enderecoFornecedor">Endereço:</label>
-<input type="text" name="enderecoFornecedor" th:field="*{enderecoFornecedor}" placeholder="Digite o endereço" />
+                    <!-- Endereço -->
+                    <div class="form-group">
+                        <label for="enderecoFornecedor" class="form-label">Endereço</label>
+                        <input type="text" 
+                               class="form-control" 
+                               th:field="*{enderecoFornecedor}" 
+                               placeholder="Rua, número, complemento"
+                               required>
+                    </div>
 
-<label for="cidadeFornecedor">Cidade:</label>
-<input type="text" name="cidadeFornecedor" th:field="*{cidadeFornecedor}" placeholder="Digite a cidade" />
+                    <!-- Cidade -->
+                    <div class="form-group">
+                        <label for="cidadeFornecedor" class="form-label">Cidade</label>
+                        <input type="text" 
+                               class="form-control" 
+                               th:field="*{cidadeFornecedor}" 
+                               placeholder="Nome da cidade"
+                               required>
+                    </div>
 
-<input type="submit" value="Salvar">
+                    <!-- Submit Button -->
+                    <button type="submit" class="btn-submit">
+                        <i class="bi bi-check-circle"></i>
+                        <span th:text="${fornecedor.idFornecedor != null} ? 'Atualizar Fornecedor' : 'Criar Fornecedor'">Salvar Fornecedor</span>
+                    </button>
 
-</form>
+                </form>
 
-<a th:href="@{/tabajara}" class="back-btn">⬅ Voltar para a lista de fornecedores</a>
+                <!-- Back Button -->
+                <a th:href="@{/fornecedores/listar}" class="btn-back">
+                    <i class="bi bi-arrow-left"></i>
+                    Voltar à Listagem
+                </a>
 
-</div>
+            </div>
+        </div>
+    </div>
 
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
