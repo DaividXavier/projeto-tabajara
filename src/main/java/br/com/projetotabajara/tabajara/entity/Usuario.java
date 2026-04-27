@@ -25,7 +25,6 @@ public class Usuario {
     @Column(nullable = false, length = 40)
     private String loginUsuario;
 
-    // 🔥 CORREÇÃO AQUI
     @Column(nullable = false, length = 100)
     private String senhaUsuario;
 

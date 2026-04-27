@@ -1,6 +1,8 @@
 package br.com.projetotabajara.tabajara.entity;
 
 
+import java.util.List;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -8,6 +10,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -40,10 +43,11 @@ public class Produto {
     private String marcaProduto;
 
     @ManyToOne
-    @JoinColumn(name= "idFornecedor_fk") // deu nome a chave estrangeira
+    @JoinColumn(name= "idFornecedor_fk") // nome da chave estrangeira
     private Fornecedor fornecedor;
 
-
+    @OneToMany(mappedBy = "produto")
+    private List<ItemPedido> itens;
 }
 
 // método construtor cheio = armazena tudo, lista depois
