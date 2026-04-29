@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <datalist id="listaUsuarios">
+        <option th:each="u : ${usuarios}" 
+        th:value="${u.idUsuario +'-' + u.nomeUsuario}"></option>
+    </datalist>
+
+    <datalist id="listaProdutos">
+        <option th:each="p : ${produtos}" 
+        th:value="${p.idProduto +'-' + p.nomeProduto}"
+        th:attr="data-preco=${p.valorProduto}">
+    </option>
+    </datalist>
+    <p>I. Identificação do Usuário</p>
+    <label for="usuario">Usuário</label>
+    <input type="text" list="listaUsuarios" id="usuario" placeholder="Digite o nome ou código do usuário">
+    <p>II. Adicionar produto ao pedido</p>
+    <label for="produto">Produto</label>
+    <input type="text" list="listaProdutos" id="produto" placeholder="Digite o nome ou código do produto">
+
+<label for="quantidade">Quantidade</label>
+<input type="number" id="quantidade" placeholder="0" min="1">
+<button type="button" onclick="adicionarItem()">
+<span>+</span>Adicionar
+</button>
+
+<table>
+    <thead>
+        <tr>
+            <th>Produto</th>
+            <th>Quantidade</th>
+            <th>Preço Unitário</th>
+            <th>Subtotal</th>
+            <th>Ação</th>
+        </tr>
+    </thead>
+    <tbody id="tabela-itens">
+        <tr id="empty-row">
+            <td colspan="5">Nenhum produto foi adicionado.</td>
+        </tr>
+    </tbody>
+</table>
+<span>Total do pedido</span>
+<span>R$ <span id="totalPedido">0,00</span></span>
+
+<button onclick="salvarPedido()">Confirmar e salvar Pedido</button>
+<script>
+        let itens = [];
+
+        function adicionarItem() {
+            let produtoInput = document.getElementById("produto").value;
+            let quantidade = document.getElementById("quantidade").value;
+
+            if (!produtoInput || quantidade <= 0) {
+                alert("Preencha corretamente o produto e a quantidade!");
+                return;
+            }
+
+            let partes = produtoInput.split(" - ");
+            let produtoId = partes[0];
+            let produtoNome = partes[1];
+
+            let options = document.querySelectorAll("#listaProdutos option");
+            let preco = null;
+
+            options.forEach(opt => {
+                if (opt.value === produtoInput) {
+                    preco = opt.getAttribute("data-preco");
+                }
+            });
+
+            if (!preco) {
+                alert("Produto inválido! Selecione um produto da lista.");
+                return;
+            }
+
+            let subtotal = quantidade * preco;
+
+            itens.push({
+                produto: { idProduto: produtoId },
+                nomeProduto: produtoNome,
+                quantidade: parseInt(quantidade),
+                preco: parseFloat(preco),
+                subtotal: subtotal
+            });
+
+            document.getElementById("produto").value = "";
+            document.getElementById("quantidade").value = "";
+
+            renderTabela();
+        }
+
+        function removerItem(index) {
+            itens.splice(index, 1);
+            renderTabela();
+        }
+
+        function renderTabela() {
+            let tabela = document.getElementById("tabela-itens");
+            let emptyRow = document.getElementById("empty-row");
+
+            tabela.innerHTML = "";
+
+            if (itens.length === 0) {
+                tabela.innerHTML = `<tr class="empty-row" id="empty-row"><td colspan="5">Nenhum produto adicionado ao pedido.</td></tr>`;
+                document.getElementById("totalPedido").innerText = "0,00";
+                return;
+            }
+
+            let total = 0;
+
+            itens.forEach((item, index) => {
+                total += item.subtotal;
+                tabela.innerHTML += `
+                    <tr>
+                        <td>${item.nomeProduto}</td>
+                        <td>${item.quantidade}</td>
+                        <td>R$ ${item.preco.toFixed(2).replace('.', ',')}</td>
+                        <td>R$ ${item.subtotal.toFixed(2).replace('.', ',')}</td>
+                        <td><button class="btn-remove" onclick="removerItem(${index})">Remover</button></td>
+                    </tr>
+                `;
+            });
+
+            document.getElementById("totalPedido").innerText = total.toFixed(2).replace('.', ',');
+        }
+
+        function salvarPedido() {
+            let usuarioInput = document.getElementById("usuario").value;
+
+            if (!usuarioInput) {
+                alert("Selecione um usuário antes de salvar!");
+                return;
+            }
+
+            if (itens.length === 0) {
+                alert("Adicione ao menos um produto ao pedido!");
+                return;
+            }
+
+            let usuarioId = usuarioInput.split(" - ")[0];
+
+            let pedido = {
+                usuario: { idUsuario: usuarioId },
+                itens: itens
+            };
+
+            fetch("/pedidos", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(pedido)
+            })
+            .then(res => res.json())
+            .then(data => {
+                alert("Pedido salvo com sucesso!");
+                location.reload();
+            })
+            .catch(err => {
+                alert("Erro ao salvar o pedido. Tente novamente.");
+                console.error(err);
+            });
+        }
+    </script>
+</body>
+</html>

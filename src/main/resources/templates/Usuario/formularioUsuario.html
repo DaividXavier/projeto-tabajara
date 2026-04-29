@@ -326,13 +326,8 @@
 
 <div class="form-container">
     
-    <!-- ALERTAS (futuro uso) -->
-    <!-- <div th:if="${#fields.hasErrors('global')}" class="alert alert-warning">
-        <i class="bi bi-exclamation-triangle me-2"></i>
-        Verifique os campos e tente novamente.
-    </div> -->
+  
 
-    <!-- FORMULÁRIO -->
     <div class="form-card">
         <div class="form-header">
             <div>
@@ -344,7 +339,6 @@
 
         <form th:action="@{/usuarios/salvar}" th:object="${usuario}" method="post">
             
-            <!-- NOME -->
             <div class="form-floating">
                 <input type="text" 
                        th:field="*{nomeUsuario}" 
@@ -396,7 +390,6 @@
                 </label>
             </div>
 
-            <!-- BOTÕES -->
             <button type="submit" class="btn btn-salvar">
                 <i class="bi bi-check-lg"></i>
                 Salvar Usuário
