@@ -36,7 +36,7 @@ public class UsuarioController {
     @PostMapping("/salvar")
     public String salvar(@ModelAttribute Usuario usuario) {
         usuarioService.save(usuario);
-        return "redirect:/usuarios/listar";
+        return "redirect:/login";
     }
 
     // EXCLUIR USUÁRIO
