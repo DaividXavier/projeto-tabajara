@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Relatorio de Pedidos</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            color: #1f2937;
+            font-size: 12px;
+            margin: 28px;
+        }
+
+        h1 {
+            color: #2563eb;
+            font-size: 24px;
+            margin: 0 0 6px;
+        }
+
+        .subtitle {
+            color: #6b7280;
+            margin: 0 0 22px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            background: #f3f4f6;
+            color: #111827;
+            text-align: left;
+            font-size: 11px;
+            text-transform: uppercase;
+            padding: 9px;
+            border: 1px solid #e5e7eb;
+        }
+
+        td {
+            padding: 9px;
+            border: 1px solid #e5e7eb;
+        }
+
+        .text-right {
+            text-align: right;
+        }
+
+        .empty {
+            color: #6b7280;
+            border: 1px solid #e5e7eb;
+            padding: 18px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <h1>Relatorio de Pedidos</h1>
+    <p class="subtitle">Organizacoes Tabajara</p>
+
+    <table th:if="${!pedidos.isEmpty()}">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Data</th>
+                <th>Usuario</th>
+                <th>Itens</th>
+                <th class="text-right">Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="pedido : ${pedidos}">
+                <td th:text="${pedido.idPedido}"></td>
+                <td th:text="${pedido.dataPedido}"></td>
+                <td th:text="${pedido.usuario != null ? pedido.usuario.nomeUsuario : 'Sem usuario'}"></td>
+                <td th:text="${pedido.itens != null ? pedido.itens.size() : 0}"></td>
+                <td class="text-right" th:text="${#numbers.formatCurrency(pedido.totalPedido)}"></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="empty" th:if="${pedidos.isEmpty()}">
+        Nenhum pedido encontrado.
+    </div>
+</body>
+</html>
