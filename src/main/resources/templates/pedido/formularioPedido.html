@@ -1,92 +1,492 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Novo Pedido - Organizacoes Tabajara</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --primary-dark: #1e40af;
+            --success-color: #10b981;
+            --danger-color: #dc2626;
+            --light-bg: #f9fafb;
+            --card-bg: #ffffff;
+            --text-dark: #1f2937;
+            --text-light: #6b7280;
+            --border-color: #e5e7eb;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            min-height: 100vh;
+            font-family: 'Inter', sans-serif;
+            color: var(--text-dark);
+            background: linear-gradient(135deg, var(--light-bg) 0%, #ffffff 100%);
+            padding-top: 70px;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background:
+                radial-gradient(circle at 18% 38%, rgba(37, 99, 235, 0.06) 0%, transparent 34%),
+                radial-gradient(circle at 84% 82%, rgba(249, 115, 22, 0.05) 0%, transparent 34%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .navbar {
+            background: var(--card-bg);
+            border-bottom: 1px solid var(--border-color);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .navbar-brand {
+            color: var(--primary-color) !important;
+            font-weight: 800;
+        }
+
+        .nav-link {
+            color: var(--text-light) !important;
+            font-weight: 600;
+        }
+
+        .nav-link:hover,
+        .nav-link:focus {
+            color: var(--primary-color) !important;
+        }
+
+        .main-content {
+            position: relative;
+            z-index: 1;
+            max-width: 1180px;
+            margin: 0 auto;
+            padding: 42px 20px 72px;
+        }
+
+        .page-header {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            gap: 24px;
+            margin-bottom: 24px;
+        }
+
+        .page-title {
+            font-size: clamp(1.9rem, 4vw, 2.7rem);
+            line-height: 1.1;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+
+        .page-subtitle {
+            color: var(--text-light);
+            margin: 0;
+        }
+
+        .actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+
+        .btn-action,
+        .btn-icon-action {
+            min-height: 42px;
+            border-radius: 8px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-weight: 700;
+            text-decoration: none;
+            border: 1px solid transparent;
+            transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+        }
+
+        .btn-action {
+            padding: 10px 16px;
+        }
+
+        .btn-action:hover,
+        .btn-icon-action:hover {
+            transform: translateY(-1px);
+        }
+
+        .btn-primary-action {
+            color: #ffffff;
+            background: var(--primary-color);
+        }
+
+        .btn-primary-action:hover {
+            color: #ffffff;
+            background: var(--primary-dark);
+        }
+
+        .btn-outline-action {
+            color: var(--text-dark);
+            background: var(--card-bg);
+            border-color: var(--border-color);
+        }
+
+        .btn-outline-action:hover {
+            color: var(--primary-color);
+            border-color: rgba(37, 99, 235, 0.32);
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) minmax(320px, 420px);
+            gap: 20px;
+            align-items: start;
+        }
+
+        .panel {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            overflow: hidden;
+        }
+
+        .panel-header {
+            padding: 18px 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .panel-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.05rem;
+            font-weight: 800;
+            margin: 0;
+        }
+
+        .panel-body {
+            padding: 20px;
+        }
+
+        .form-label {
+            color: var(--text-dark);
+            font-size: 0.9rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .form-control {
+            min-height: 44px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background: var(--light-bg);
+            color: var(--text-dark);
+        }
+
+        .form-control:focus {
+            background: #ffffff;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+        }
+
+        .product-row {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) 140px auto;
+            gap: 12px;
+            align-items: end;
+        }
+
+        .btn-add {
+            min-width: 118px;
+            border: 0;
+        }
+
+        .table-panel {
+            margin-top: 18px;
+            overflow: hidden;
+        }
+
+        .table {
+            margin: 0;
+        }
+
+        .table thead th {
+            background: #f3f4f6;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-dark);
+            font-size: 0.82rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            padding: 14px 16px;
+        }
+
+        .table tbody td {
+            padding: 14px 16px;
+            vertical-align: middle;
+        }
+
+        .empty-row td {
+            color: var(--text-light);
+            text-align: center;
+            padding: 34px 16px;
+        }
+
+        .btn-remove {
+            width: 36px;
+            height: 36px;
+            color: var(--danger-color);
+            background: rgba(220, 38, 38, 0.08);
+            border: 1px solid rgba(220, 38, 38, 0.16);
+            border-radius: 8px;
+        }
+
+        .summary-line {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            padding: 14px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .summary-line:last-child {
+            border-bottom: 0;
+        }
+
+        .summary-label {
+            color: var(--text-light);
+            font-weight: 700;
+        }
+
+        .summary-value {
+            color: var(--text-dark);
+            font-size: 1.45rem;
+            font-weight: 800;
+        }
+
+        .btn-save {
+            width: 100%;
+            min-height: 46px;
+            margin-top: 18px;
+            border: 0;
+        }
+
+        @media (max-width: 900px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .page-header {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .actions,
+            .btn-action {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .product-row {
+                grid-template-columns: 1fr;
+            }
+
+            .btn-add {
+                width: 100%;
+            }
+        }
+    </style>
 </head>
 <body>
-    <datalist id="listaUsuarios">
-        <option th:each="u : ${usuarios}" 
-        th:value="${u.idUsuario +'-' + u.nomeUsuario}"></option>
-    </datalist>
+    <nav class="navbar navbar-expand-lg fixed-top">
+        <div class="container-fluid px-3 px-lg-4">
+            <a class="navbar-brand" th:href="@{/home}">
+                <i class="bi bi-building me-2"></i>Organizacoes Tabajara
+            </a>
 
-    <datalist id="listaProdutos">
-        <option th:each="p : ${produtos}" 
-        th:value="${p.idProduto +'-' + p.nomeProduto}"
-        th:attr="data-preco=${p.valorProduto}">
-    </option>
-    </datalist>
-    <p>I. Identificação do Usuário</p>
-    <label for="usuario">Usuário</label>
-    <input type="text" list="listaUsuarios" id="usuario" placeholder="Digite o nome ou código do usuário">
-    <p>II. Adicionar produto ao pedido</p>
-    <label for="produto">Produto</label>
-    <input type="text" list="listaProdutos" id="produto" placeholder="Digite o nome ou código do produto">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarPedido" aria-controls="navbarPedido" aria-expanded="false" aria-label="Abrir navegacao">
+                <span class="navbar-toggler-icon"></span>
+            </button>
 
-<label for="quantidade">Quantidade</label>
-<input type="number" id="quantidade" placeholder="0" min="1">
-<button type="button" onclick="adicionarItem()">
-<span>+</span>Adicionar
-</button>
+            <div class="collapse navbar-collapse" id="navbarPedido">
+                <div class="navbar-nav ms-auto">
+                    <a class="nav-link" th:href="@{/home}">Home</a>
+                    <a class="nav-link" th:href="@{/pedidos/listar}">Pedidos</a>
+                    <a class="nav-link" th:href="@{/relatorios/pedidos}">Relatorios</a>
+                    <a class="nav-link" th:href="@{/logout}">Sair</a>
+                </div>
+            </div>
+        </div>
+    </nav>
 
-<table>
-    <thead>
-        <tr>
-            <th>Produto</th>
-            <th>Quantidade</th>
-            <th>Preço Unitário</th>
-            <th>Subtotal</th>
-            <th>Ação</th>
-        </tr>
-    </thead>
-    <tbody id="tabela-itens">
-        <tr id="empty-row">
-            <td colspan="5">Nenhum produto foi adicionado.</td>
-        </tr>
-    </tbody>
-</table>
-<span>Total do pedido</span>
-<span>R$ <span id="totalPedido">0,00</span></span>
+    <main class="main-content">
+        <header class="page-header">
+            <div>
+                <h1 class="page-title">Novo Pedido</h1>
+                <p class="page-subtitle">Selecione o usuario, adicione produtos e confirme o pedido.</p>
+            </div>
 
-<button onclick="salvarPedido()">Confirmar e salvar Pedido</button>
-<script>
+            <div class="actions">
+                <a th:href="@{/pedidos/listar}" class="btn-action btn-outline-action">
+                    <i class="bi bi-list-ul"></i>
+                    Listar pedidos
+                </a>
+                <a th:href="@{/home}" class="btn-action btn-outline-action">
+                    <i class="bi bi-arrow-left"></i>
+                    Voltar
+                </a>
+            </div>
+        </header>
+
+        <datalist id="listaUsuarios">
+            <option th:each="u : ${usuarios}" th:value="${u.idUsuario + ' - ' + u.nomeUsuario}"></option>
+        </datalist>
+
+        <datalist id="listaProdutos">
+            <option th:each="p : ${produtos}"
+                    th:value="${p.idProduto + ' - ' + p.descricaoProduto}"
+                    th:attr="data-preco=${p.valorProduto}">
+            </option>
+        </datalist>
+
+        <div class="form-grid">
+            <section class="panel">
+                <div class="panel-header">
+                    <h2 class="panel-title">
+                        <i class="bi bi-cart-plus"></i>
+                        Dados do pedido
+                    </h2>
+                </div>
+
+                <div class="panel-body">
+                    <div class="mb-4">
+                        <label for="usuario" class="form-label">Usuario</label>
+                        <input type="text" class="form-control" list="listaUsuarios" id="usuario" placeholder="Digite o nome ou codigo do usuario">
+                    </div>
+
+                    <div class="product-row">
+                        <div>
+                            <label for="produto" class="form-label">Produto</label>
+                            <input type="text" class="form-control" list="listaProdutos" id="produto" placeholder="Digite o nome ou codigo do produto">
+                        </div>
+
+                        <div>
+                            <label for="quantidade" class="form-label">Quantidade</label>
+                            <input type="number" class="form-control" id="quantidade" placeholder="0" min="1">
+                        </div>
+
+                        <button type="button" class="btn-action btn-primary-action btn-add" onclick="adicionarItem()">
+                            <i class="bi bi-plus-circle"></i>
+                            Adicionar
+                        </button>
+                    </div>
+
+                    <div class="panel table-panel">
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle">
+                                <thead>
+                                    <tr>
+                                        <th>Produto</th>
+                                        <th>Quantidade</th>
+                                        <th>Preco unitario</th>
+                                        <th>Subtotal</th>
+                                        <th class="text-end">Acao</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tabela-itens">
+                                    <tr class="empty-row" id="empty-row">
+                                        <td colspan="5">Nenhum produto foi adicionado.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <aside class="panel">
+                <div class="panel-header">
+                    <h2 class="panel-title">
+                        <i class="bi bi-receipt"></i>
+                        Resumo
+                    </h2>
+                </div>
+
+                <div class="panel-body">
+                    <div class="summary-line">
+                        <span class="summary-label">Itens</span>
+                        <span id="totalItens" class="fw-bold">0</span>
+                    </div>
+
+                    <div class="summary-line">
+                        <span class="summary-label">Total do pedido</span>
+                        <span class="summary-value">R$ <span id="totalPedido">0,00</span></span>
+                    </div>
+
+                    <button type="button" class="btn-action btn-primary-action btn-save" onclick="salvarPedido()">
+                        <i class="bi bi-check-circle"></i>
+                        Confirmar e salvar pedido
+                    </button>
+                </div>
+            </aside>
+        </div>
+    </main>
+
+    <script>
         let itens = [];
 
-        function adicionarItem() {
-            let produtoInput = document.getElementById("produto").value;
-            let quantidade = document.getElementById("quantidade").value;
+        function extrairId(valor) {
+            return parseInt(valor.split(" - ")[0], 10);
+        }
 
-            if (!produtoInput || quantidade <= 0) {
+        function adicionarItem() {
+            const produtoInput = document.getElementById("produto").value;
+            const quantidade = parseInt(document.getElementById("quantidade").value, 10);
+
+            if (!produtoInput || quantidade <= 0 || Number.isNaN(quantidade)) {
                 alert("Preencha corretamente o produto e a quantidade!");
                 return;
             }
 
-            let partes = produtoInput.split(" - ");
-            let produtoId = partes[0];
-            let produtoNome = partes[1];
+            const partes = produtoInput.split(" - ");
+            const produtoId = parseInt(partes[0], 10);
+            const produtoNome = partes.slice(1).join(" - ");
+            const option = Array.from(document.querySelectorAll("#listaProdutos option"))
+                .find(opt => opt.value === produtoInput);
 
-            let options = document.querySelectorAll("#listaProdutos option");
-            let preco = null;
-
-            options.forEach(opt => {
-                if (opt.value === produtoInput) {
-                    preco = opt.getAttribute("data-preco");
-                }
-            });
-
-            if (!preco) {
-                alert("Produto inválido! Selecione um produto da lista.");
+            if (!option || Number.isNaN(produtoId)) {
+                alert("Produto invalido! Selecione um produto da lista.");
                 return;
             }
 
-            let subtotal = quantidade * preco;
+            const preco = parseFloat(option.getAttribute("data-preco"));
+
+            if (Number.isNaN(preco)) {
+                alert("O produto selecionado nao possui preco valido.");
+                return;
+            }
+
+            const subtotal = quantidade * preco;
 
             itens.push({
                 produto: { idProduto: produtoId },
                 nomeProduto: produtoNome,
-                quantidade: parseInt(quantidade),
-                preco: parseFloat(preco),
+                quantidade: quantidade,
+                preco: preco,
                 subtotal: subtotal
             });
 
@@ -102,14 +502,15 @@
         }
 
         function renderTabela() {
-            let tabela = document.getElementById("tabela-itens");
-            let emptyRow = document.getElementById("empty-row");
+            const tabela = document.getElementById("tabela-itens");
+            const totalItens = document.getElementById("totalItens");
 
             tabela.innerHTML = "";
 
             if (itens.length === 0) {
-                tabela.innerHTML = `<tr class="empty-row" id="empty-row"><td colspan="5">Nenhum produto adicionado ao pedido.</td></tr>`;
+                tabela.innerHTML = '<tr class="empty-row" id="empty-row"><td colspan="5">Nenhum produto foi adicionado.</td></tr>';
                 document.getElementById("totalPedido").innerText = "0,00";
+                totalItens.innerText = "0";
                 return;
             }
 
@@ -123,19 +524,25 @@
                         <td>${item.quantidade}</td>
                         <td>R$ ${item.preco.toFixed(2).replace('.', ',')}</td>
                         <td>R$ ${item.subtotal.toFixed(2).replace('.', ',')}</td>
-                        <td><button class="btn-remove" onclick="removerItem(${index})">Remover</button></td>
+                        <td class="text-end">
+                            <button type="button" class="btn-remove" onclick="removerItem(${index})" title="Remover item">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </td>
                     </tr>
                 `;
             });
 
             document.getElementById("totalPedido").innerText = total.toFixed(2).replace('.', ',');
+            totalItens.innerText = itens.length.toString();
         }
 
         function salvarPedido() {
-            let usuarioInput = document.getElementById("usuario").value;
+            const usuarioInput = document.getElementById("usuario").value;
+            const usuarioId = extrairId(usuarioInput);
 
-            if (!usuarioInput) {
-                alert("Selecione um usuário antes de salvar!");
+            if (!usuarioInput || Number.isNaN(usuarioId)) {
+                alert("Selecione um usuario antes de salvar!");
                 return;
             }
 
@@ -144,11 +551,12 @@
                 return;
             }
 
-            let usuarioId = usuarioInput.split(" - ")[0];
-
-            let pedido = {
+            const pedido = {
                 usuario: { idUsuario: usuarioId },
-                itens: itens
+                itens: itens.map(item => ({
+                    produto: item.produto,
+                    quantidade: item.quantidade
+                }))
             };
 
             fetch("/pedidos", {
@@ -156,16 +564,25 @@
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(pedido)
             })
-            .then(res => res.json())
-            .then(data => {
+            .then(res => {
+                if (!res.ok) {
+                    throw new Error("Erro ao salvar o pedido");
+                }
+                return res.json();
+            })
+            .then(() => {
                 alert("Pedido salvo com sucesso!");
-                location.reload();
+                window.location.href = "/pedidos/listar";
             })
             .catch(err => {
                 alert("Erro ao salvar o pedido. Tente novamente.");
                 console.error(err);
             });
         }
+
+        document.getElementById("usuario").focus();
     </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

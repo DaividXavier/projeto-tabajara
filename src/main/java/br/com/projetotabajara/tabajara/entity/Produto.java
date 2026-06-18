@@ -37,7 +37,7 @@ public class Produto {
     private Double valorProduto;
 
     @Column(nullable = false, length = 10)
-    private Integer unidadeProduto;
+    private String unidadeProduto;
 
     @Column(nullable = false, length = 30)
     private String marcaProduto;
