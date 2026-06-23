@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Usuarios - Organizacoes Tabajara</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link th:href="@{/css/tabajara.css}" rel="stylesheet">
+</head>
+<body>
+<div class="app-shell">
+    <aside class="sidebar">
+        <a class="brand" th:href="@{/home}"><span class="brand-mark"><i class="bi bi-building"></i></span><span><span class="brand-name">Organizacoes Tabajara</span><span class="brand-subtitle">Painel administrativo</span></span></a>
+        <nav class="side-nav">
+            <a class="side-link" th:href="@{/home}"><i class="bi bi-grid-1x2"></i>Inicio</a>
+            <a class="side-link" th:href="@{/pedidos/criar}"><i class="bi bi-receipt-cutoff"></i>Pedidos</a>
+            <a class="side-link" th:href="@{/produtos/listar}"><i class="bi bi-box-seam"></i>Produtos</a>
+            <a class="side-link" th:href="@{/fornecedores/listar}"><i class="bi bi-truck"></i>Fornecedores</a>
+            <a class="side-link active" th:href="@{/usuarios/listar}"><i class="bi bi-people"></i>Usuarios</a>
+            <a class="side-link" th:href="@{/relatorios/pedidos}"><i class="bi bi-bar-chart-line"></i>Relatorios</a>
+        </nav>
+        <div class="side-actions">
+            <a class="side-button" th:href="@{/usuarios/criar}"><i class="bi bi-person-plus"></i>Novo usuario</a>
+            <a class="side-button logout-link" th:href="@{/logout}"><i class="bi bi-box-arrow-right"></i>Sair</a>
+        </div>
+    </aside>
+
+    <main class="content">
+        <nav class="mobile-menu">
+            <a class="side-link" th:href="@{/home}"><i class="bi bi-grid-1x2"></i>Inicio</a>
+            <a class="side-link" th:href="@{/pedidos/criar}"><i class="bi bi-receipt-cutoff"></i>Pedidos</a>
+            <a class="side-link" th:href="@{/produtos/listar}"><i class="bi bi-box-seam"></i>Produtos</a>
+            <a class="side-link" th:href="@{/relatorios/pedidos}"><i class="bi bi-bar-chart-line"></i>Relatorios</a>
+        </nav>
+        <header class="page-top">
+            <div>
+                <div class="eyebrow">Acesso</div>
+                <h1 class="page-title">Usuarios</h1>
+                <p class="page-subtitle">Veja os usuarios cadastrados e mantenha o controle de acesso.</p>
+            </div>
+            <div class="page-actions">
+                <a class="action-button primary" th:href="@{/usuarios/criar}"><i class="bi bi-person-plus"></i>Novo usuario</a>
+                <a class="action-button" th:href="@{/home}"><i class="bi bi-arrow-left"></i>Voltar</a>
+            </div>
+        </header>
+
+        <section class="summary-grid">
+            <article class="summary-card usuarios"><span class="module-icon"><i class="bi bi-people"></i></span><span>Total cadastrado</span><strong th:text="${usuarios != null ? usuarios.size() : 0}">0</strong></article>
+            <article class="summary-card produtos"><span class="module-icon"><i class="bi bi-shield-check"></i></span><span>Permissao padrao</span><strong>User</strong></article>
+            <article class="summary-card pedidos"><span class="module-icon"><i class="bi bi-key"></i></span><span>Acesso ao sistema</span><strong>Login</strong></article>
+        </section>
+
+        <section class="panel table-card">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle">
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nome</th>
+                        <th>Email</th>
+                        <th>Login</th>
+                        <th class="text-end">Acoes</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:if="${usuarios == null || usuarios.isEmpty()}">
+                        <td colspan="5"><div class="empty-state"><i class="bi bi-inbox"></i>Nenhum usuario cadastrado.</div></td>
+                    </tr>
+                    <tr th:each="u : ${usuarios}">
+                        <td><strong th:text="${u.idUsuario}">1</strong></td>
+                        <td th:text="${u.nomeUsuario}">Usuario</td>
+                        <td th:text="${u.emailUsuario}">email@exemplo.com</td>
+                        <td th:text="${u.loginUsuario}">login</td>
+                        <td class="text-end">
+                            <a class="table-button danger" th:href="@{/usuarios/excluir/{id}(id=${u.idUsuario})}" onclick="return confirm('Excluir este usuario?')" title="Excluir"><i class="bi bi-trash"></i></a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+        <footer class="footer"><p class="mb-0">&copy; 2026 Organizacoes Tabajara. Sistema de Gestao.</p></footer>
+    </main>
+</div>
+</body>
+</html>

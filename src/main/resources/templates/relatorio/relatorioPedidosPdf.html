@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <title>Relatorio de Pedidos - PDF</title>
+    <style>
+        @page {
+            size: A4;
+            margin: 24mm 18mm;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            color: #172033;
+            background: #ffffff;
+        }
+
+        .report-header {
+            border-bottom: 2px solid #1d4ed8;
+            padding-bottom: 16px;
+            margin-bottom: 22px;
+        }
+
+        .brand-row {
+            display: table;
+            width: 100%;
+        }
+
+        .brand-mark,
+        .brand-text {
+            display: table-cell;
+            vertical-align: middle;
+        }
+
+        .brand-mark {
+            width: 42px;
+            height: 42px;
+            background: #1d4ed8;
+            color: #ffffff;
+            text-align: center;
+            font-size: 22px;
+            font-weight: bold;
+            line-height: 42px;
+        }
+
+        .brand-text {
+            padding-left: 12px;
+        }
+
+        h1 {
+            font-size: 24px;
+            margin: 0;
+            line-height: 1.2;
+        }
+
+        .subtitle {
+            margin: 4px 0 0;
+            color: #667085;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .summary {
+            display: table;
+            width: 100%;
+            margin-bottom: 18px;
+        }
+
+        .summary-item {
+            display: table-cell;
+            width: 33.33%;
+            border: 1px solid #d9e1ec;
+            padding: 12px;
+        }
+
+        .summary-item span {
+            display: block;
+            color: #667085;
+            font-size: 11px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .summary-item strong {
+            display: block;
+            font-size: 18px;
+            margin-top: 5px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 12px;
+        }
+
+        th {
+            background: #f3f6fb;
+            color: #475467;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            font-size: 10px;
+            text-align: left;
+            border: 1px solid #d9e1ec;
+            padding: 9px;
+        }
+
+        td {
+            border: 1px solid #d9e1ec;
+            padding: 9px;
+        }
+
+        .text-right {
+            text-align: right;
+        }
+
+        .footer {
+            margin-top: 18px;
+            color: #667085;
+            font-size: 11px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+<header class="report-header">
+    <div class="brand-row">
+        <div class="brand-mark">T</div>
+        <div class="brand-text">
+            <h1>Relatorio de pedidos</h1>
+            <p class="subtitle">Organizacoes Tabajara</p>
+        </div>
+    </div>
+</header>
+
+<section class="summary">
+    <div class="summary-item">
+        <span>Total de pedidos</span>
+        <strong th:text="${pedidos != null ? pedidos.size() : 0}">0</strong>
+    </div>
+    <div class="summary-item">
+        <span>Formato</span>
+        <strong>PDF</strong>
+    </div>
+    <div class="summary-item">
+        <span>Sistema</span>
+        <strong>Gestao</strong>
+    </div>
+</section>
+
+<table>
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Data</th>
+        <th>Usuario</th>
+        <th>Itens</th>
+        <th class="text-right">Total</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="pedido : ${pedidos}">
+        <td th:text="${pedido.idPedido}"></td>
+        <td th:text="${pedido.dataPedido}"></td>
+        <td th:text="${pedido.usuario != null ? pedido.usuario.nomeUsuario : 'Sem usuario'}"></td>
+        <td th:text="${pedido.itens != null ? pedido.itens.size() : 0}"></td>
+        <td class="text-right" th:text="${#numbers.formatCurrency(pedido.totalPedido)}"></td>
+    </tr>
+    </tbody>
+</table>
+
+<p class="footer">&#169; 2026 Organizacoes Tabajara. Sistema de Gestao.</p>
+</body>
+</html>

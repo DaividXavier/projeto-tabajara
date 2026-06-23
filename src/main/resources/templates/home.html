@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home - Organizacoes Tabajara</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --ink: #172033;
+            --muted: #667085;
+            --line: #d9e1ec;
+            --panel: #ffffff;
+            --page: #f3f6fb;
+            --blue: #1d4ed8;
+            --blue-soft: #e8f0ff;
+            --green: #059669;
+            --green-soft: #e7f7f1;
+            --amber: #d97706;
+            --amber-soft: #fff3db;
+            --red: #dc2626;
+            --red-soft: #ffe8e8;
+            --violet: #6d28d9;
+            --violet-soft: #efe8ff;
+            --shadow: 0 16px 40px rgba(23, 32, 51, 0.09);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+            color: var(--ink);
+            background: var(--page);
+            overflow-x: hidden;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        .app-shell {
+            min-height: 100vh;
+            display: grid;
+            grid-template-columns: 282px minmax(0, 1fr);
+        }
+
+        .sidebar {
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            background: #111827;
+            color: #ffffff;
+            padding: 22px 18px;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 8px 6px 18px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+        }
+
+        .brand-mark {
+            width: 44px;
+            height: 44px;
+            border-radius: 8px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+            background: var(--blue);
+            font-size: 1.35rem;
+            flex: 0 0 auto;
+        }
+
+        .brand-name {
+            display: block;
+            font-size: 1rem;
+            line-height: 1.2;
+            font-weight: 900;
+        }
+
+        .brand-subtitle {
+            display: block;
+            color: #9ca3af;
+            font-size: 0.78rem;
+            margin-top: 2px;
+            font-weight: 600;
+        }
+
+        .side-nav {
+            display: grid;
+            gap: 7px;
+        }
+
+        .side-link {
+            min-height: 44px;
+            border-radius: 8px;
+            color: #d1d5db;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 12px;
+            font-weight: 700;
+            transition: background 0.18s ease, color 0.18s ease;
+        }
+
+        .side-link i {
+            width: 22px;
+            color: #93c5fd;
+            font-size: 1.05rem;
+        }
+
+        .side-link:hover,
+        .side-link:focus,
+        .side-link.active {
+            color: #ffffff;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .side-actions {
+            margin-top: auto;
+            display: grid;
+            gap: 10px;
+        }
+
+        .side-button {
+            min-height: 44px;
+            border-radius: 8px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-weight: 800;
+            color: #ffffff;
+            background: var(--blue);
+        }
+
+        .side-button:hover {
+            color: #ffffff;
+            background: #1e40af;
+        }
+
+        .logout-link {
+            color: #cbd5e1;
+            border: 1px solid rgba(255, 255, 255, 0.14);
+            background: transparent;
+        }
+
+        .logout-link:hover {
+            color: #ffffff;
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .content {
+            min-width: 0;
+            padding: 28px;
+        }
+
+        .topbar {
+            min-height: 64px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .mobile-menu {
+            display: none;
+        }
+
+        .eyebrow {
+            color: var(--blue);
+            font-size: 0.78rem;
+            font-weight: 900;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            margin-bottom: 4px;
+        }
+
+        .topbar h1 {
+            font-size: clamp(1.75rem, 3vw, 2.55rem);
+            line-height: 1.08;
+            margin: 0;
+            font-weight: 900;
+            letter-spacing: 0;
+        }
+
+        .topbar p {
+            margin: 8px 0 0;
+            color: var(--muted);
+            font-weight: 500;
+        }
+
+        .quick-actions {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        .action-button {
+            min-height: 44px;
+            border-radius: 8px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 10px 15px;
+            font-weight: 800;
+            color: var(--ink);
+            background: var(--panel);
+            border: 1px solid var(--line);
+            box-shadow: 0 8px 18px rgba(23, 32, 51, 0.05);
+        }
+
+        .action-button.primary {
+            color: #ffffff;
+            background: var(--blue);
+            border-color: var(--blue);
+        }
+
+        .action-button:hover {
+            color: var(--blue);
+            border-color: #b8caf0;
+        }
+
+        .action-button.primary:hover {
+            color: #ffffff;
+            background: #1e40af;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: minmax(0, 1.35fr) minmax(320px, 0.65fr);
+            gap: 22px;
+            align-items: start;
+        }
+
+        .hero-panel {
+            min-height: 360px;
+            border-radius: 8px;
+            background:
+                linear-gradient(135deg, rgba(17, 24, 39, 0.94), rgba(29, 78, 216, 0.86)),
+                url('https://images.unsplash.com/photo-1554224155-6726b3ff858f?auto=format&fit=crop&w=1400&q=80');
+            background-size: cover;
+            background-position: center;
+            color: #ffffff;
+            padding: 32px;
+            box-shadow: var(--shadow);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            overflow: hidden;
+        }
+
+        .hero-panel h2 {
+            max-width: 720px;
+            font-size: clamp(2rem, 4vw, 3.75rem);
+            line-height: 1.02;
+            margin: 0 0 14px;
+            font-weight: 900;
+        }
+
+        .hero-panel p {
+            max-width: 610px;
+            color: #dbeafe;
+            font-size: 1.02rem;
+            line-height: 1.65;
+            margin: 0;
+        }
+
+        .hero-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 26px;
+        }
+
+        .hero-button {
+            min-height: 46px;
+            border-radius: 8px;
+            padding: 11px 16px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            color: #111827;
+            background: #ffffff;
+            font-weight: 900;
+        }
+
+        .hero-button.secondary {
+            color: #ffffff;
+            background: rgba(255, 255, 255, 0.14);
+            border: 1px solid rgba(255, 255, 255, 0.24);
+        }
+
+        .hero-button:hover {
+            color: var(--blue);
+        }
+
+        .hero-button.secondary:hover {
+            color: #ffffff;
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .hero-strip {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-top: 34px;
+        }
+
+        .strip-item {
+            border-radius: 8px;
+            padding: 14px;
+            background: rgba(255, 255, 255, 0.13);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+        }
+
+        .strip-item strong {
+            display: block;
+            font-size: 1.35rem;
+            line-height: 1;
+            margin-bottom: 6px;
+        }
+
+        .strip-item span {
+            color: #dbeafe;
+            font-size: 0.85rem;
+            font-weight: 700;
+        }
+
+        .panel {
+            background: var(--panel);
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            box-shadow: 0 10px 28px rgba(23, 32, 51, 0.06);
+        }
+
+        .panel-header {
+            padding: 20px 20px 0;
+        }
+
+        .panel-header h2 {
+            font-size: 1.1rem;
+            margin: 0;
+            font-weight: 900;
+        }
+
+        .panel-header p {
+            color: var(--muted);
+            margin: 6px 0 0;
+            font-size: 0.92rem;
+        }
+
+        .module-list {
+            padding: 14px;
+            display: grid;
+            gap: 10px;
+        }
+
+        .module-row {
+            min-height: 76px;
+            border-radius: 8px;
+            border: 1px solid transparent;
+            color: var(--ink);
+            background: #f8fafc;
+            padding: 12px;
+            display: grid;
+            grid-template-columns: 46px minmax(0, 1fr) 28px;
+            gap: 12px;
+            align-items: center;
+            transition: background 0.18s ease, border-color 0.18s ease, transform 0.18s ease;
+        }
+
+        .module-row:hover {
+            color: var(--ink);
+            background: #ffffff;
+            border-color: var(--line);
+            transform: translateX(3px);
+        }
+
+        .module-icon {
+            width: 46px;
+            height: 46px;
+            border-radius: 8px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            color: var(--module-color);
+            background: var(--module-bg);
+        }
+
+        .module-row h3 {
+            margin: 0 0 3px;
+            font-size: 1rem;
+            font-weight: 900;
+        }
+
+        .module-row p {
+            margin: 0;
+            color: var(--muted);
+            font-size: 0.86rem;
+            line-height: 1.35;
+        }
+
+        .row-arrow {
+            color: #94a3b8;
+            text-align: right;
+        }
+
+        .pedidos {
+            --module-color: var(--violet);
+            --module-bg: var(--violet-soft);
+        }
+
+        .produtos {
+            --module-color: var(--blue);
+            --module-bg: var(--blue-soft);
+        }
+
+        .fornecedores {
+            --module-color: var(--amber);
+            --module-bg: var(--amber-soft);
+        }
+
+        .usuarios {
+            --module-color: var(--green);
+            --module-bg: var(--green-soft);
+        }
+
+        .relatorios {
+            --module-color: var(--red);
+            --module-bg: var(--red-soft);
+        }
+
+        .wide-section {
+            margin-top: 22px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px;
+        }
+
+        .info-card {
+            min-height: 150px;
+            padding: 20px;
+            background: var(--panel);
+            border: 1px solid var(--line);
+            border-radius: 8px;
+        }
+
+        .info-card i {
+            width: 42px;
+            height: 42px;
+            border-radius: 8px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 18px;
+            color: var(--module-color);
+            background: var(--module-bg);
+            font-size: 1.18rem;
+        }
+
+        .info-card h3 {
+            font-size: 1.02rem;
+            font-weight: 900;
+            margin: 0 0 8px;
+        }
+
+        .info-card p {
+            color: var(--muted);
+            margin: 0;
+            line-height: 1.55;
+            font-size: 0.92rem;
+        }
+
+        .footer {
+            color: var(--muted);
+            padding: 26px 0 0;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 1100px) {
+            .app-shell {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                position: static;
+                height: auto;
+                padding: 14px 18px;
+            }
+
+            .brand {
+                padding-bottom: 12px;
+            }
+
+            .side-nav,
+            .side-actions {
+                display: none;
+            }
+
+            .mobile-menu {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 8px;
+                margin-bottom: 18px;
+            }
+
+            .mobile-menu .side-link {
+                color: var(--ink);
+                background: #ffffff;
+                border: 1px solid var(--line);
+            }
+
+            .mobile-menu .side-link i {
+                color: var(--blue);
+            }
+        }
+
+        @media (max-width: 920px) {
+            .content {
+                padding: 20px;
+            }
+
+            .topbar,
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+                display: grid;
+            }
+
+            .quick-actions {
+                justify-content: flex-start;
+            }
+
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .wide-section {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 620px) {
+            .content {
+                padding: 14px;
+            }
+
+            .hero-panel {
+                min-height: auto;
+                padding: 24px;
+            }
+
+            .hero-strip {
+                grid-template-columns: 1fr;
+            }
+
+            .quick-actions,
+            .action-button,
+            .hero-button,
+            .mobile-menu .side-link {
+                width: 100%;
+            }
+
+            .module-row {
+                grid-template-columns: 42px minmax(0, 1fr);
+            }
+
+            .row-arrow {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="app-shell">
+    <aside class="sidebar">
+        <a class="brand" th:href="@{/home}">
+            <span class="brand-mark"><i class="bi bi-building"></i></span>
+            <span>
+                <span class="brand-name">Organizacoes Tabajara</span>
+                <span class="brand-subtitle">Painel administrativo</span>
+            </span>
+        </a>
+
+        <nav class="side-nav" aria-label="Menu principal">
+            <a class="side-link active" th:href="@{/home}">
+                <i class="bi bi-grid-1x2"></i>
+                Inicio
+            </a>
+            <a class="side-link" th:href="@{/pedidos/criar}">
+                <i class="bi bi-receipt-cutoff"></i>
+                Pedidos
+            </a>
+            <a class="side-link" th:href="@{/produtos/listar}">
+                <i class="bi bi-box-seam"></i>
+                Produtos
+            </a>
+            <a class="side-link" th:href="@{/fornecedores/listar}">
+                <i class="bi bi-truck"></i>
+                Fornecedores
+            </a>
+            <a class="side-link" th:href="@{/usuarios/listar}">
+                <i class="bi bi-people"></i>
+                Usuarios
+            </a>
+            <a class="side-link" th:href="@{/relatorios/pedidos}">
+                <i class="bi bi-bar-chart-line"></i>
+                Relatorios
+            </a>
+        </nav>
+
+        <div class="side-actions">
+            <a class="side-button" th:href="@{/pedidos/criar}">
+                <i class="bi bi-plus-circle"></i>
+                Novo pedido
+            </a>
+            <a class="side-button logout-link" th:href="@{/logout}">
+                <i class="bi bi-box-arrow-right"></i>
+                Sair
+            </a>
+        </div>
+    </aside>
+
+    <main class="content">
+        <nav class="mobile-menu" aria-label="Menu rapido">
+            <a class="side-link" th:href="@{/produtos/listar}"><i class="bi bi-box-seam"></i>Produtos</a>
+            <a class="side-link" th:href="@{/fornecedores/listar}"><i class="bi bi-truck"></i>Fornecedores</a>
+            <a class="side-link" th:href="@{/usuarios/listar}"><i class="bi bi-people"></i>Usuarios</a>
+            <a class="side-link" th:href="@{/relatorios/pedidos}"><i class="bi bi-bar-chart-line"></i>Relatorios</a>
+        </nav>
+
+        <header class="topbar">
+            <div>
+                <div class="eyebrow">Visao geral</div>
+                <h1>Sistema de Gestao</h1>
+                <p>Controle pedidos, cadastros e relatorios a partir de um painel mais direto.</p>
+            </div>
+
+            <div class="quick-actions">
+                <a th:href="@{/pedidos/criar}" class="action-button primary">
+                    <i class="bi bi-plus-circle"></i>
+                    Novo pedido
+                </a>
+                <a th:href="@{/relatorios/pedidos/pdf}" class="action-button">
+                    <i class="bi bi-file-earmark-pdf"></i>
+                    Gerar PDF
+                </a>
+            </div>
+        </header>
+
+        <section class="dashboard-grid">
+            <div class="hero-panel">
+                <div>
+                    <div class="eyebrow text-white">Organizacoes Tabajara</div>
+                    <h2>Uma central para tocar a rotina sem perder tempo.</h2>
+                    <p>Comece por um novo pedido, revise produtos cadastrados ou acompanhe fornecedores, usuarios e relatorios em poucos cliques.</p>
+
+                    <div class="hero-actions">
+                        <a th:href="@{/pedidos/criar}" class="hero-button">
+                            <i class="bi bi-receipt"></i>
+                            Criar pedido
+                        </a>
+                        <a th:href="@{/produtos/listar}" class="hero-button secondary">
+                            <i class="bi bi-box-seam"></i>
+                            Ver produtos
+                        </a>
+                    </div>
+                </div>
+
+                <div class="hero-strip" aria-label="Resumo do painel">
+                    <div class="strip-item">
+                        <strong>5</strong>
+                        <span>Areas principais</span>
+                    </div>
+                    <div class="strip-item">
+                        <strong>PDF</strong>
+                        <span>Relatorio pronto</span>
+                    </div>
+                    <div class="strip-item">
+                        <strong>24h</strong>
+                        <span>Acesso rapido</span>
+                    </div>
+                </div>
+            </div>
+
+            <aside class="panel">
+                <div class="panel-header">
+                    <h2>Acessos do sistema</h2>
+                    <p>Escolha uma area para continuar.</p>
+                </div>
+
+                <div class="module-list">
+                    <a th:href="@{/pedidos/criar}" class="module-row pedidos">
+                        <span class="module-icon"><i class="bi bi-receipt"></i></span>
+                        <span>
+                            <h3>Pedidos</h3>
+                            <p>Monte novas compras e vincule produtos.</p>
+                        </span>
+                        <i class="bi bi-arrow-right row-arrow"></i>
+                    </a>
+
+                    <a th:href="@{/produtos/listar}" class="module-row produtos">
+                        <span class="module-icon"><i class="bi bi-box-seam"></i></span>
+                        <span>
+                            <h3>Produtos</h3>
+                            <p>Cadastre marcas, unidades e fornecedores.</p>
+                        </span>
+                        <i class="bi bi-arrow-right row-arrow"></i>
+                    </a>
+
+                    <a th:href="@{/fornecedores/listar}" class="module-row fornecedores">
+                        <span class="module-icon"><i class="bi bi-truck"></i></span>
+                        <span>
+                            <h3>Fornecedores</h3>
+                            <p>Organize contato, CNPJ e endereco.</p>
+                        </span>
+                        <i class="bi bi-arrow-right row-arrow"></i>
+                    </a>
+
+                    <a th:href="@{/usuarios/listar}" class="module-row usuarios">
+                        <span class="module-icon"><i class="bi bi-people"></i></span>
+                        <span>
+                            <h3>Usuarios</h3>
+                            <p>Gerencie os acessos cadastrados.</p>
+                        </span>
+                        <i class="bi bi-arrow-right row-arrow"></i>
+                    </a>
+
+                    <a th:href="@{/relatorios/pedidos}" class="module-row relatorios">
+                        <span class="module-icon"><i class="bi bi-file-earmark-bar-graph"></i></span>
+                        <span>
+                            <h3>Relatorios</h3>
+                            <p>Visualize pedidos e gere arquivos PDF.</p>
+                        </span>
+                        <i class="bi bi-arrow-right row-arrow"></i>
+                    </a>
+                </div>
+            </aside>
+        </section>
+
+        <section class="wide-section" aria-label="Atalhos">
+            <article class="info-card produtos">
+                <i class="bi bi-search"></i>
+                <h3>Consulta rapida</h3>
+                <p>Acesse listas de produtos, fornecedores e usuarios sem passar por menus longos.</p>
+            </article>
+
+            <article class="info-card pedidos">
+                <i class="bi bi-bag-plus"></i>
+                <h3>Pedidos no centro</h3>
+                <p>O fluxo principal ganhou destaque para facilitar o inicio de novas compras.</p>
+            </article>
+
+            <article class="info-card relatorios">
+                <i class="bi bi-printer"></i>
+                <h3>Saida em PDF</h3>
+                <p>O relatorio de pedidos continua visivel para conferir, baixar ou imprimir.</p>
+            </article>
+        </section>
+
+        <footer class="footer">
+            <p class="mb-0">&copy; 2026 Organizacoes Tabajara. Sistema de Gestao.</p>
+        </footer>
+    </main>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

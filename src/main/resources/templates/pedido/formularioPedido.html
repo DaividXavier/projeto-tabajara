@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Novo Pedido - Organizacoes Tabajara</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link th:href="@{/css/tabajara.css}" rel="stylesheet">
+    <style>
+        .order-grid {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) minmax(300px, 390px);
+            gap: 20px;
+            align-items: start;
+        }
+
+        .product-row {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) 130px auto;
+            gap: 12px;
+            align-items: end;
+        }
+
+        .summary-line {
+            display: flex;
+            justify-content: space-between;
+            gap: 16px;
+            padding: 14px 0;
+            border-bottom: 1px solid var(--line);
+        }
+
+        .summary-line:last-child {
+            border-bottom: 0;
+        }
+
+        .summary-value {
+            font-size: 1.6rem;
+            font-weight: 900;
+        }
+
+        @media (max-width: 980px) {
+            .order-grid,
+            .product-row {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="app-shell">
+    <aside class="sidebar">
+        <a class="brand" th:href="@{/home}"><span class="brand-mark"><i class="bi bi-building"></i></span><span><span class="brand-name">Organizacoes Tabajara</span><span class="brand-subtitle">Painel administrativo</span></span></a>
+        <nav class="side-nav">
+            <a class="side-link" th:href="@{/home}"><i class="bi bi-grid-1x2"></i>Inicio</a>
+            <a class="side-link active" th:href="@{/pedidos/criar}"><i class="bi bi-receipt-cutoff"></i>Pedidos</a>
+            <a class="side-link" th:href="@{/produtos/listar}"><i class="bi bi-box-seam"></i>Produtos</a>
+            <a class="side-link" th:href="@{/fornecedores/listar}"><i class="bi bi-truck"></i>Fornecedores</a>
+            <a class="side-link" th:href="@{/usuarios/listar}"><i class="bi bi-people"></i>Usuarios</a>
+            <a class="side-link" th:href="@{/relatorios/pedidos}"><i class="bi bi-bar-chart-line"></i>Relatorios</a>
+        </nav>
+        <div class="side-actions">
+            <a class="side-button" th:href="@{/pedidos/listar}"><i class="bi bi-list-ul"></i>Listar pedidos</a>
+            <a class="side-button logout-link" th:href="@{/logout}"><i class="bi bi-box-arrow-right"></i>Sair</a>
+        </div>
+    </aside>
+
+    <main class="content">
+        <nav class="mobile-menu">
+            <a class="side-link" th:href="@{/home}"><i class="bi bi-grid-1x2"></i>Inicio</a>
+            <a class="side-link" th:href="@{/pedidos/listar}"><i class="bi bi-list-ul"></i>Pedidos</a>
+            <a class="side-link" th:href="@{/produtos/listar}"><i class="bi bi-box-seam"></i>Produtos</a>
+            <a class="side-link" th:href="@{/relatorios/pedidos}"><i class="bi bi-bar-chart-line"></i>Relatorios</a>
+        </nav>
+
+        <header class="page-top">
+            <div>
+                <div class="eyebrow">Operacao</div>
+                <h1 class="page-title">Novo pedido</h1>
+                <p class="page-subtitle">Selecione o usuario, adicione produtos e confirme a compra.</p>
+            </div>
+            <div class="page-actions">
+                <a class="action-button" th:href="@{/pedidos/listar}"><i class="bi bi-list-ul"></i>Listar pedidos</a>
+                <a class="action-button" th:href="@{/home}"><i class="bi bi-arrow-left"></i>Voltar</a>
+            </div>
+        </header>
+
+        <datalist id="listaUsuarios">
+            <option th:each="u : ${usuarios}" th:value="${u.idUsuario + ' - ' + u.nomeUsuario}"></option>
+        </datalist>
+        <datalist id="listaProdutos">
+            <option th:each="p : ${produtos}" th:value="${p.idProduto + ' - ' + p.descricaoProduto}" th:attr="data-preco=${p.valorProduto}"></option>
+        </datalist>
+
+        <div class="order-grid">
+            <section class="panel">
+                <div class="panel-header">
+                    <h2 class="panel-title">Dados do pedido</h2>
+                    <p class="panel-subtitle">Busque pelos cadastros e monte a lista de itens.</p>
+                </div>
+                <div class="panel-body">
+                    <div class="mb-4">
+                        <label for="usuario" class="form-label">Usuario</label>
+                        <input type="text" class="form-control" list="listaUsuarios" id="usuario" placeholder="Digite o nome ou codigo do usuario">
+                    </div>
+
+                    <div class="product-row">
+                        <div>
+                            <label for="produto" class="form-label">Produto</label>
+                            <input type="text" class="form-control" list="listaProdutos" id="produto" placeholder="Digite o nome ou codigo do produto">
+                        </div>
+                        <div>
+                            <label for="quantidade" class="form-label">Quantidade</label>
+                            <input type="number" class="form-control" id="quantidade" placeholder="0" min="1">
+                        </div>
+                        <button type="button" class="form-button primary" onclick="adicionarItem()"><i class="bi bi-plus-circle"></i>Adicionar</button>
+                    </div>
+
+                    <section class="panel table-card mt-4">
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle">
+                                <thead>
+                                <tr>
+                                    <th>Produto</th>
+                                    <th>Qtd.</th>
+                                    <th>Preco</th>
+                                    <th>Subtotal</th>
+                                    <th class="text-end">Acao</th>
+                                </tr>
+                                </thead>
+                                <tbody id="tabela-itens">
+                                <tr><td colspan="5"><div class="empty-state"><i class="bi bi-bag"></i>Nenhum produto adicionado.</div></td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </section>
+                </div>
+            </section>
+
+            <aside class="panel">
+                <div class="panel-header">
+                    <h2 class="panel-title">Resumo</h2>
+                    <p class="panel-subtitle">Confira antes de salvar.</p>
+                </div>
+                <div class="panel-body">
+                    <div class="summary-line">
+                        <span class="text-muted fw-bold">Itens</span>
+                        <span id="totalItens" class="fw-bold">0</span>
+                    </div>
+                    <div class="summary-line">
+                        <span class="text-muted fw-bold">Total</span>
+                        <span class="summary-value">R$ <span id="totalPedido">0,00</span></span>
+                    </div>
+                    <button type="button" class="form-button primary w-100 mt-3" onclick="salvarPedido()"><i class="bi bi-check-circle"></i>Confirmar pedido</button>
+                </div>
+            </aside>
+        </div>
+    </main>
+</div>
+
+<script>
+    let itens = [];
+
+    function extrairId(valor) {
+        return parseInt(valor.split(" - ")[0], 10);
+    }
+
+    function adicionarItem() {
+        const produtoInput = document.getElementById("produto").value;
+        const quantidade = parseInt(document.getElementById("quantidade").value, 10);
+
+        if (!produtoInput || quantidade <= 0 || Number.isNaN(quantidade)) {
+            alert("Preencha corretamente o produto e a quantidade.");
+            return;
+        }
+
+        const partes = produtoInput.split(" - ");
+        const produtoId = parseInt(partes[0], 10);
+        const produtoNome = partes.slice(1).join(" - ");
+        const option = Array.from(document.querySelectorAll("#listaProdutos option")).find(opt => opt.value === produtoInput);
+
+        if (!option || Number.isNaN(produtoId)) {
+            alert("Selecione um produto valido da lista.");
+            return;
+        }
+
+        const preco = parseFloat(option.getAttribute("data-preco"));
+        if (Number.isNaN(preco)) {
+            alert("O produto selecionado nao possui preco valido.");
+            return;
+        }
+
+        itens.push({
+            produto: { idProduto: produtoId },
+            nomeProduto: produtoNome,
+            quantidade: quantidade,
+            preco: preco,
+            subtotal: quantidade * preco
+        });
+
+        document.getElementById("produto").value = "";
+        document.getElementById("quantidade").value = "";
+        renderTabela();
+    }
+
+    function removerItem(index) {
+        itens.splice(index, 1);
+        renderTabela();
+    }
+
+    function renderTabela() {
+        const tabela = document.getElementById("tabela-itens");
+        tabela.innerHTML = "";
+
+        if (itens.length === 0) {
+            tabela.innerHTML = '<tr><td colspan="5"><div class="empty-state"><i class="bi bi-bag"></i>Nenhum produto adicionado.</div></td></tr>';
+            document.getElementById("totalPedido").innerText = "0,00";
+            document.getElementById("totalItens").innerText = "0";
+            return;
+        }
+
+        let total = 0;
+        itens.forEach((item, index) => {
+            total += item.subtotal;
+            tabela.innerHTML += `
+                <tr>
+                    <td>${item.nomeProduto}</td>
+                    <td>${item.quantidade}</td>
+                    <td>R$ ${item.preco.toFixed(2).replace('.', ',')}</td>
+                    <td>R$ ${item.subtotal.toFixed(2).replace('.', ',')}</td>
+                    <td class="text-end">
+                        <button type="button" class="table-button danger" onclick="removerItem(${index})" title="Remover"><i class="bi bi-trash"></i></button>
+                    </td>
+                </tr>`;
+        });
+
+        document.getElementById("totalPedido").innerText = total.toFixed(2).replace('.', ',');
+        document.getElementById("totalItens").innerText = itens.length.toString();
+    }
+
+    function salvarPedido() {
+        const usuarioInput = document.getElementById("usuario").value;
+        const usuarioId = extrairId(usuarioInput);
+
+        if (!usuarioInput || Number.isNaN(usuarioId)) {
+            alert("Selecione um usuario antes de salvar.");
+            return;
+        }
+
+        if (itens.length === 0) {
+            alert("Adicione ao menos um produto ao pedido.");
+            return;
+        }
+
+        fetch("/pedidos", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                usuarioId: usuarioId,
+                itens: itens.map(item => ({
+                    produtoId: item.produto.idProduto,
+                    quantidade: item.quantidade
+                }))
+            })
+        })
+            .then(async res => {
+                if (!res.ok) {
+                    const detalhe = await res.text();
+                    throw new Error(detalhe || "Erro ao salvar o pedido");
+                }
+                return res.json();
+            })
+            .then(() => {
+                alert("Pedido salvo com sucesso!");
+                window.location.href = "/pedidos/listar";
+            })
+            .catch(err => {
+                alert("Erro ao salvar o pedido: " + err.message);
+                console.error(err);
+            });
+    }
+
+    document.getElementById("usuario")?.focus();
+</script>
+</body>
+</html>
