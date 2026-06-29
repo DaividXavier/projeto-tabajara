@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Organizacoes Tabajara - Sistema de Gestao</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link th:href="@{/css/tabajara.css}" rel="stylesheet">
+</head>
+<body>
+<main class="public-hero">
+    <div class="public-content">
+        <a class="brand d-inline-flex border-0 p-0" th:href="@{/}">
+            <span class="brand-mark"><i class="bi bi-building"></i></span>
+            <span><span class="brand-name">Organizacoes Tabajara</span><span class="brand-subtitle">Sistema empresarial</span></span>
+        </a>
+        <h1>Organizacoes Tabajara</h1>
+        <p>Uma plataforma simples para controlar produtos, fornecedores, usuarios, pedidos e relatorios em uma rotina de gestao mais organizada.</p>
+        <div class="public-actions">
+            <a class="action-button primary" th:href="@{/login}"><i class="bi bi-box-arrow-in-right"></i>Entrar no sistema</a>
+            <a class="action-button" th:href="@{/usuarios/criar}"><i class="bi bi-person-plus"></i>Criar usuario</a>
+        </div>
+    </div>
+</main>
+</body>
+</html>
